@@ -196,4 +196,20 @@ class EmployeeIntegrationTest {
                 .andExpect(jsonPath("$.status").value("NOT_FOUND"))
                 .andReturn();
     }
+
+    @Test
+    void should_return_error_response_with_message_and_status_when_employee_update_given_null_attributes() throws Exception {
+        //given
+        Employee employee = new Employee("nelly", 18, "female", 10);
+        Employee createdEmployee = employeeRepository.save(employee);
+        Employee updatedEmployee = new Employee(null, null, null, null);
+
+        // when then
+        mockMvc.perform(put("/employees/{employeeId}", createdEmployee.getId())
+                .content(gson.toJson(updatedEmployee, Employee.class))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Employee given has null fields!"))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"));
+    }
 }
