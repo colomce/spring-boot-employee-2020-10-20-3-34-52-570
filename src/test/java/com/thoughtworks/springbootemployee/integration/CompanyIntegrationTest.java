@@ -12,7 +12,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -137,5 +140,27 @@ public class CompanyIntegrationTest {
                 .andExpect(jsonPath("$.message").value("Company with id:12345 not found"))
                 .andExpect(jsonPath("$.status").value("NOT_FOUND"))
                 .andReturn();
+    }
+
+    @Test
+    void should_return_2_companies_when_getCompaniesByPageAndPageSize_given_3_companies_page_1_pageSize_2() throws Exception {
+        //given
+        Company company1 = new Company("OOCL", Collections.emptyList());
+        Company company2 = new Company("YG", Collections.emptyList());
+        Company company3 = new Company("JYP", Collections.emptyList());
+
+        companyRepository.save(company1);
+        companyRepository.save(company2);
+        companyRepository.save(company3);
+
+        // when then
+        mockMvc.perform(get("/companies?page=1&pageSize=2"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").isNumber())
+                .andExpect(jsonPath("$[0].companyName").value("OOCL"))
+                .andExpect(jsonPath("$[0].employees").isEmpty())
+                .andExpect(jsonPath("$[1].id").isNumber())
+                .andExpect(jsonPath("$[1].companyName").value("YG"))
+                .andExpect(jsonPath("$[1].employees").isEmpty());
     }
 }
