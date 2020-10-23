@@ -34,11 +34,8 @@ public class CompanyService {
     }
 
     public List<Employee> getEmployeesByCompanyId(Integer id) {
-        Optional<Company> optionalCompany = companyRepository.findById(id);
-        if (optionalCompany.isPresent()) {
-            return optionalCompany.get().getEmployees();
-        }
-        return Collections.emptyList();
+        Company company = searchById(id);
+        return company.getEmployees();
     }
 
     public Company update(Integer id, Company updatedCompany) {
