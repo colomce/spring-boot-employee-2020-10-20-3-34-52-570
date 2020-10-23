@@ -57,7 +57,7 @@ public class EmployeeService {
     }
 
     public void delete(Integer id) {
-        employeeRepository.deleteById(id);
+        employeeRepository.delete(searchById(id));
     }
 
     public List<Employee> searchByGender(String gender) {
