@@ -97,12 +97,13 @@ class EmployeeServiceTest {
         Employee employee = new Employee("", 20, "male", 1000);
         employee.setId(1);
         IEmployeeRepository repository = mock(IEmployeeRepository.class);
+        when(repository.findById(employee.getId())).thenReturn(of(employee));
 
         EmployeeService employeeService = new EmployeeService(repository);
         //when
         employeeService.delete(employee.getId());
         //then
-        verify(repository, times(1)).deleteById(1);
+        verify(repository, times(1)).delete(employee);
     }
 
     @Test
