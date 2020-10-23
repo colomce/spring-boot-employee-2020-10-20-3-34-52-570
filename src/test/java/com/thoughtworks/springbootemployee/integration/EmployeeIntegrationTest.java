@@ -221,7 +221,12 @@ class EmployeeIntegrationTest {
     void should_return_the_error_response_with_message_and_status_when_update_id_given_invalid_employee_id() throws Exception {
         //given
         Integer employeeId = 12345;
-        String employeeUpdateJson = "{}";
+        String employeeUpdateJson = "{\n" +
+                "\t\"name\" : \"Joseph\", \n" +
+                "\t\"gender\" : \"male\",\n" +
+                "\t\"age\" : 13,\n" +
+                "\t\"salary\" : 10000\n" +
+                "}";
 
         // when then
         mockMvc.perform(put("/employees/{employeeId}", employeeId)
