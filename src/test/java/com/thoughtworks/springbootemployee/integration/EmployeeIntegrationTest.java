@@ -77,9 +77,16 @@ class EmployeeIntegrationTest {
         Employee createdEmployee = employeeRepository.save(employee);
         Employee updatedEmployee = new Employee("yllen", 19, "female", 100);
 
+        String employeeUpdateJson = "{\n" +
+                "\t\"name\" : \"yllen\", \n" +
+                "\t\"gender\" : \"female\",\n" +
+                "\t\"age\" : 19,\n" +
+                "\t\"salary\" : 100\n" +
+                "}";
+
         // when then
-        mockMvc.perform(put("/employees/" + createdEmployee.getId())
-                .content(gson.toJson(updatedEmployee, Employee.class))
+        mockMvc.perform(put("/employees/{employeeId}" , createdEmployee.getId())
+                .content(employeeUpdateJson)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -237,4 +244,6 @@ class EmployeeIntegrationTest {
                 .andExpect(jsonPath("$.status").value("NOT_FOUND"))
                 .andReturn();
     }
+
+
 }
