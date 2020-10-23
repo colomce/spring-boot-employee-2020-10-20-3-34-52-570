@@ -1,6 +1,7 @@
 package com.thoughtworks.springbootemployee.services;
 
 import com.thoughtworks.springbootemployee.exceptions.EmployeeNotFoundException;
+import com.thoughtworks.springbootemployee.exceptions.InvalidEmployeeException;
 import com.thoughtworks.springbootemployee.models.Employee;
 import com.thoughtworks.springbootemployee.repository.IEmployeeRepository;
 import org.springframework.data.domain.PageRequest;
@@ -8,7 +9,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+
+import static java.util.Objects.*;
 
 @Service
 public class EmployeeService {
@@ -33,6 +37,8 @@ public class EmployeeService {
     }
 
     public Employee update(Integer id, Employee employee) {
+        validateEmployeeUpdate(employee);
+
         Optional<Employee> optionalEmployee = employeeRepository.findById(id);
         if (optionalEmployee.isPresent()) {
             optionalEmployee.get().setSalary(employee.getSalary());
@@ -42,6 +48,16 @@ public class EmployeeService {
             return employeeRepository.save(optionalEmployee.get());
         }
         return null;
+    }
+
+    private void validateEmployeeUpdate(Employee employee)
+    {
+        if(isNull(employee.getGender())
+                || isNull(employee.getAge())
+                || isNull(employee.getSalary())
+                || isNull(employee.getName())) {
+            throw new InvalidEmployeeException("Employee given has null fields!");
+        }
     }
 
     public void delete(Integer id) {
