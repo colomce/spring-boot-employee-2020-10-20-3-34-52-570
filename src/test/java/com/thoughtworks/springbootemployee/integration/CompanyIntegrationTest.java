@@ -12,8 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -105,6 +104,19 @@ public class CompanyIntegrationTest {
 
         // when then
         mockMvc.perform(get("/companies/{companyId}", companyId))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Company with id:12345 not found"))
+                .andExpect(jsonPath("$.status").value("NOT_FOUND"))
+                .andReturn();
+    }
+
+    @Test
+    void should_return_the_error_response_with_message_and_status_when_delete_by_id_given_invalid_company_id() throws Exception {
+        //given
+        Integer companyId = 12345;
+
+        // when then
+        mockMvc.perform(delete("/companies/{companyId}", companyId))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Company with id:12345 not found"))
                 .andExpect(jsonPath("$.status").value("NOT_FOUND"))
