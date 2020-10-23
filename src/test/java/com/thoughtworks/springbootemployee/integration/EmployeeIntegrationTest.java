@@ -216,4 +216,20 @@ class EmployeeIntegrationTest {
                 .andExpect(jsonPath("$.message").value("Employee given has null fields!"))
                 .andExpect(jsonPath("$.status").value("BAD_REQUEST"));
     }
+
+    @Test
+    void should_return_the_error_response_with_message_and_status_when_update_id_given_invalid_employee_id() throws Exception {
+        //given
+        Integer employeeId = 12345;
+        String employeeUpdateJson = "{}";
+
+        // when then
+        mockMvc.perform(put("/employees/{employeeId}", employeeId)
+                .content(employeeUpdateJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Employee with id:12345 not found"))
+                .andExpect(jsonPath("$.status").value("NOT_FOUND"))
+                .andReturn();
+    }
 }
