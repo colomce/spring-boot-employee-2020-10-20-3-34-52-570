@@ -83,7 +83,21 @@ public class CompanyIntegrationTest {
                 .andExpect(jsonPath("$.employees[1].gender").value("male"))
                 .andExpect(jsonPath("$.employees[1].salary").value(100000000));
     }
-    
+
+    @Test
+    void should_get_company_with_company_id_1_when_search_by_id_given_company_with_id_1() throws Exception {
+        //given
+        Company company = new Company("OOCL", Collections.emptyList());
+        Company createdCompany = companyRepository.save(company);
+
+        //when then
+        mockMvc.perform(get("/companies/{companyId}", createdCompany.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.companyName").value("OOCL"))
+                .andExpect(jsonPath("$.employees").isEmpty());
+    }
+
     @Test
     void should_return_the_error_response_with_message_and_status_when_search_by_id_given_invalid_company_id() throws Exception {
         //given
