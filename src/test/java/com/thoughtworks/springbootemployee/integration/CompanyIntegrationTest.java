@@ -178,4 +178,18 @@ public class CompanyIntegrationTest {
                 .andExpect(jsonPath("$.companyName").value("SME"))
                 .andExpect(jsonPath("$.employees").isEmpty());
     }
+
+    @Test
+    void should_return_the_error_response_with_message_and_status_when_getEmployeesByCompanyId_given_invalid_company_id() throws Exception {
+        //given
+        Integer companyId = 12345;
+
+        // when then
+        mockMvc.perform(get("/companies/{companyId}/employees", companyId))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Company with id:12345 not found"))
+                .andExpect(jsonPath("$.status").value("NOT_FOUND"))
+                .andReturn();
+    }
+
 }
