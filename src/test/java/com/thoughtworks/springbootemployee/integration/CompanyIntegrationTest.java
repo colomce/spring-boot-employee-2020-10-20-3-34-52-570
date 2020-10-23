@@ -2,15 +2,18 @@ package com.thoughtworks.springbootemployee.integration;
 
 import com.thoughtworks.springbootemployee.models.Company;
 import com.thoughtworks.springbootemployee.repository.ICompanyRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -19,15 +22,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CompanyIntegrationTest {
 
     @Autowired
-    private ICompanyRepository repository;
+    private ICompanyRepository companyRepository;
 
     @Autowired
     private MockMvc mockMvc;
 
+    @AfterEach
+    void tearDown() {
+        companyRepository.deleteAll();
+    }
+
     @Test
     void should_get_all_companies_when_get_all() throws Exception {
         Company company = new Company("OOCL", Collections.emptyList());
-        repository.save(company);
+        companyRepository.save(company);
 
         mockMvc.perform(get("/companies"))
                 .andExpect(status().isOk())
@@ -36,6 +44,46 @@ public class CompanyIntegrationTest {
                 .andExpect(jsonPath("$[0].employees").isEmpty());
     }
 
+    @Test
+    void should_return_created_company_when_create_a_company() throws Exception {
+        String companyJson = "{\n" +
+                "    \"companyName\": \"OOCL\",\n" +
+                "    \"employees\": [\n" +
+                "        {\n" +
+                "            \"name\": \"colomce\",\n" +
+                "            \"age\": 10,\n" +
+                "            \"gender\": \"male\",\n" +
+                "            \"salary\": 100000000\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"name\": \"manalch\",\n" +
+                "            \"age\": 10,\n" +
+                "            \"gender\": \"male\",\n" +
+                "            \"salary\": 100000000\n" +
+                "        }\n" +
+                "    ]\n" +
+                "}";
+
+        //when then
+        mockMvc.perform(post("/companies")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(companyJson))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.companyName").value("OOCL"))
+                .andExpect(jsonPath("$.employees").isNotEmpty())
+                .andExpect(jsonPath("$.employees[0].id").isNumber())
+                .andExpect(jsonPath("$.employees[0].name").value("colomce"))
+                .andExpect(jsonPath("$.employees[0].age").value(10))
+                .andExpect(jsonPath("$.employees[0].gender").value("male"))
+                .andExpect(jsonPath("$.employees[0].salary").value(100000000))
+                .andExpect(jsonPath("$.employees[1].id").isNumber())
+                .andExpect(jsonPath("$.employees[1].name").value("manalch"))
+                .andExpect(jsonPath("$.employees[1].age").value(10))
+                .andExpect(jsonPath("$.employees[1].gender").value("male"))
+                .andExpect(jsonPath("$.employees[1].salary").value(100000000));
+    }
+    
     @Test
     void should_return_the_error_response_with_message_and_status_when_search_by_id_given_invalid_company_id() throws Exception {
         //given
