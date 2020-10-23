@@ -14,7 +14,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Optional;
 
 import static org.junit.Assert.assertFalse;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -202,11 +205,12 @@ class EmployeeIntegrationTest {
         //given
         Employee employee = new Employee("nelly", 18, "female", 10);
         Employee createdEmployee = employeeRepository.save(employee);
-        Employee updatedEmployee = new Employee(null, null, null, null);
+
+        String employeeUpdateJson = "{}";
 
         // when then
         mockMvc.perform(put("/employees/{employeeId}", createdEmployee.getId())
-                .content(gson.toJson(updatedEmployee, Employee.class))
+                .content(employeeUpdateJson)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("Employee given has null fields!"))
