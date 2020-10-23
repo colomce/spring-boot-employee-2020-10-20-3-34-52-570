@@ -36,18 +36,14 @@ public class EmployeeService {
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee with id:" + id + " not found"));
     }
 
-    public Employee update(Integer id, Employee employee) {
-        validateEmployeeUpdate(employee);
-
-        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
-        if (optionalEmployee.isPresent()) {
-            optionalEmployee.get().setSalary(employee.getSalary());
-            optionalEmployee.get().setAge(employee.getAge());
-            optionalEmployee.get().setGender(employee.getGender());
-            optionalEmployee.get().setName(employee.getName());
-            return employeeRepository.save(optionalEmployee.get());
-        }
-        return null;
+    public Employee update(Integer id, Employee employeeUpdate) {
+        validateEmployeeUpdate(employeeUpdate);
+        Employee employee = searchById(id);
+        employee.setSalary(employee.getSalary());
+        employee.setAge(employee.getAge());
+        employee.setGender(employee.getGender());
+        employee.setName(employee.getName());
+        return employeeRepository.save(employee);
     }
 
     private void validateEmployeeUpdate(Employee employee)
