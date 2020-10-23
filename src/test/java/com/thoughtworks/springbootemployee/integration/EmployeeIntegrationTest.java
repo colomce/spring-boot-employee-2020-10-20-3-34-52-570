@@ -245,5 +245,17 @@ class EmployeeIntegrationTest {
                 .andReturn();
     }
 
+    @Test
+    void should_return_the_error_response_with_message_and_status_when_delete_by_id_given_invalid_employee_id() throws Exception {
+        //given
+        Integer employeeId = 12345;
+
+        // when then
+        mockMvc.perform(delete("/employees/{employeeId}", employeeId))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Employee with id:12345 not found"))
+                .andExpect(jsonPath("$.status").value("NOT_FOUND"))
+                .andReturn();
+    }
 
 }
