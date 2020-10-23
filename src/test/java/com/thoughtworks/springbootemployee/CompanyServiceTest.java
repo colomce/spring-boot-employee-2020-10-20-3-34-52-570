@@ -109,11 +109,11 @@ class CompanyServiceTest {
         CompanyService companyService = new CompanyService(repository);
 
         //when
-        Optional<Company> fetchedCompany = companyService.searchById(company.getId());
+        Company fetchedCompany = companyService.searchById(company.getId());
 
         //then
         assertNotNull(company);
-        assertSame(company, fetchedCompany.orElse(null));
+        assertSame(company, fetchedCompany);
     }
 
     @Test

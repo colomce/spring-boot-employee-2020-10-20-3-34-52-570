@@ -41,7 +41,7 @@ public class CompaniesController {
     }
 
     @GetMapping("/{companyId}")
-    public Optional<Company> searchById(@PathVariable("companyId") Integer companyId) {
+    public Company searchById(@PathVariable("companyId") Integer companyId) {
         return companyService.searchById(companyId);
     }
 

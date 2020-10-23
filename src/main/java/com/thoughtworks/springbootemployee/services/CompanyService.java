@@ -28,12 +28,9 @@ public class CompanyService {
         return companyRepository.save(newCompany);
     }
 
-    public Optional<Company> searchById(Integer id) {
-        Optional<Company> optionalCompany = companyRepository.findById(id);
-        if(optionalCompany.isPresent()) {
-            return optionalCompany;
-        }
-        throw new CompanyNotFoundException("Company with id:" + id + " not found");
+    public Company searchById(Integer id) {
+        return companyRepository.findById(id)
+                .orElseThrow(() -> new CompanyNotFoundException("Company with id:" + id + " not found"));
     }
 
     public List<Employee> getEmployeesByCompanyId(Integer id) {
@@ -54,7 +51,7 @@ public class CompanyService {
     }
 
     public void delete(Integer id) {
-        companyRepository.deleteById(id);
+        companyRepository.delete(searchById(id));
     }
 
     public List<Company> getCompaniesByPageAndPageSize(int page, int pageSize) {
