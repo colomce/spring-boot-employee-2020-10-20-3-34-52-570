@@ -9,10 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
-import static java.util.Objects.*;
+import static java.util.Objects.isNull;
 
 @Service
 public class EmployeeService {
@@ -46,9 +44,8 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
-    private void validateEmployeeUpdate(Employee employee)
-    {
-        if(isNull(employee.getGender())
+    private void validateEmployeeUpdate(Employee employee) {
+        if (isNull(employee.getGender())
                 || isNull(employee.getAge())
                 || isNull(employee.getSalary())
                 || isNull(employee.getName())) {
