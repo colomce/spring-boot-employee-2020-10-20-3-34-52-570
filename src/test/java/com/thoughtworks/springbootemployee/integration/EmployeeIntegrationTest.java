@@ -3,7 +3,6 @@ package com.thoughtworks.springbootemployee.integration;
 import com.google.gson.Gson;
 import com.thoughtworks.springbootemployee.models.Employee;
 import com.thoughtworks.springbootemployee.repository.IEmployeeRepository;
-import com.thoughtworks.springbootemployee.response.ErrorResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +10,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -193,14 +190,10 @@ class EmployeeIntegrationTest {
         Integer employeeId = 12345;
 
         // when then
-        MvcResult mvcResult = mockMvc.perform(get("/employees/", employeeId))
+        mockMvc.perform(get("/employees/{employeeId}", employeeId))
                 .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Employee with id:12345 not found"))
+                .andExpect(jsonPath("$.status").value("NOT_FOUND"))
                 .andReturn();
-
-        String json = mvcResult.getResponse().getContentAsString();
-
-        ErrorResponse errorResponse = gson.fromJson(json, ErrorResponse.class);
-        assertEquals("Employee with id:12345 not found", errorResponse.getMessage());
-        assertEquals("NOT FOUND", errorResponse.getStatus());
     }
 }
