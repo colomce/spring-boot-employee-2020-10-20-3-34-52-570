@@ -42,12 +42,9 @@ public class CompanyService {
     }
 
     public Company update(Integer id, Company updatedCompany) {
-        Optional<Company> optionalCompany = companyRepository.findById(id);
-        if (optionalCompany.isPresent()) {
-            optionalCompany.get().setCompanyName(updatedCompany.getCompanyName());
-            return companyRepository.save(optionalCompany.get());
-        }
-        return null;
+        Company company = searchById(id);
+        company.setCompanyName(updatedCompany.getCompanyName());
+        return companyRepository.save(company);
     }
 
     public void delete(Integer id) {
