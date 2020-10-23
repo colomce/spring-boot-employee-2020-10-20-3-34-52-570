@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.services;
 
+import com.thoughtworks.springbootemployee.exceptions.EmployeeNotFoundException;
 import com.thoughtworks.springbootemployee.models.Employee;
 import com.thoughtworks.springbootemployee.repository.IEmployeeRepository;
 import org.springframework.data.domain.PageRequest;
@@ -26,8 +27,9 @@ public class EmployeeService {
         return employeeRepository.save(newEmployee);
     }
 
-    public Optional<Employee> searchById(Integer id) {
-        return employeeRepository.findById(id);
+    public Employee searchById(Integer id) {
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee with id:" + id + " not found"));
     }
 
     public Employee update(Integer id, Employee employee) {

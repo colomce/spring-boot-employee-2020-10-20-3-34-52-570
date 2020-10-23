@@ -3,6 +3,7 @@ package com.thoughtworks.springbootemployee.integration;
 import com.google.gson.Gson;
 import com.thoughtworks.springbootemployee.models.Employee;
 import com.thoughtworks.springbootemployee.repository.IEmployeeRepository;
+import com.thoughtworks.springbootemployee.response.ErrorResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Optional;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -182,5 +185,22 @@ class EmployeeIntegrationTest {
                 .andExpect(jsonPath("$[0].age").value(18))
                 .andExpect(jsonPath("$[0].gender").value("male"))
                 .andExpect(jsonPath("$[0].salary").value(10));
+    }
+
+    @Test
+    void should_return_the_error_response_with_message_and_status_when_search_by_id_given_invalid_employee_id() throws Exception {
+        //given
+        Integer employeeId = 12345;
+
+        // when then
+        MvcResult mvcResult = mockMvc.perform(get("/employees/", employeeId))
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+        String json = mvcResult.getResponse().getContentAsString();
+
+        ErrorResponse errorResponse = gson.fromJson(json, ErrorResponse.class);
+        assertEquals("Employee with id:12345 not found", errorResponse.getMessage());
+        assertEquals("NOT FOUND", errorResponse.getStatus());
     }
 }
