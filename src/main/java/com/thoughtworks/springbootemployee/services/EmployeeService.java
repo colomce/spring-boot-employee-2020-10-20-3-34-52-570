@@ -39,10 +39,10 @@ public class EmployeeService {
     public Employee update(Integer id, Employee employeeUpdate) {
         validateEmployeeUpdate(employeeUpdate);
         Employee employee = searchById(id);
-        employee.setSalary(employee.getSalary());
-        employee.setAge(employee.getAge());
-        employee.setGender(employee.getGender());
-        employee.setName(employee.getName());
+        employee.setSalary(employeeUpdate.getSalary());
+        employee.setAge(employeeUpdate.getAge());
+        employee.setGender(employeeUpdate.getGender());
+        employee.setName(employeeUpdate.getName());
         return employeeRepository.save(employee);
     }
 
