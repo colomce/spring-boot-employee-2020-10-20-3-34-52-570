@@ -58,8 +58,8 @@ public class EmployeesController {
     }
 
     @GetMapping(params = {"page", "pageSize"})
-    public List<Employee> getByEmployeeByPage(@RequestParam("page") Integer page,
-                                              @RequestParam("pageSize") Integer pageSize) {
-        return employeeService.getEmployeeByPageAndPageSize(page, pageSize);
+    public List<EmployeeResponse> getByEmployeeByPage(@RequestParam("page") Integer page,
+                                                      @RequestParam("pageSize") Integer pageSize) {
+        return employeeMapper.toResponseList(employeeService.getEmployeeByPageAndPageSize(page, pageSize));
     }
 }
