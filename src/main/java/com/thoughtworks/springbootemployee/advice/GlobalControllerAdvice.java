@@ -2,6 +2,7 @@ package com.thoughtworks.springbootemployee.advice;
 
 import com.thoughtworks.springbootemployee.exceptions.CompanyNotFoundException;
 import com.thoughtworks.springbootemployee.exceptions.EmployeeNotFoundException;
+import com.thoughtworks.springbootemployee.exceptions.InvalidCompanyException;
 import com.thoughtworks.springbootemployee.exceptions.InvalidEmployeeException;
 import com.thoughtworks.springbootemployee.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
@@ -28,5 +29,11 @@ public class GlobalControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleInvalidEmployeeException(InvalidEmployeeException invalidEmployeeException) {
         return new ErrorResponse(invalidEmployeeException.getMessage(), HttpStatus.BAD_REQUEST.name());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleInvalidCompanyException(InvalidCompanyException invalidCompanyException) {
+        return new ErrorResponse(invalidCompanyException.getMessage(), HttpStatus.BAD_REQUEST.name());
     }
 }
