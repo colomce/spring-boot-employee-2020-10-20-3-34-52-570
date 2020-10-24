@@ -28,10 +28,6 @@ public class CompanyRequest {
         return employees;
     }
 
-    public int getEmployeeNumber() {
-        return employees.size();
-    }
-
     public void setEmployees(List<Employee> employees) {
         this.employees = employees;
     }
