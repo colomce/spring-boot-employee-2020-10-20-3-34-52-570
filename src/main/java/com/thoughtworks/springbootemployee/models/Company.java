@@ -40,10 +40,6 @@ public class Company {
         return employees;
     }
 
-    public int getEmployeesNumber() {
-        return employees.size();
-    }
-
     public Integer getId() {
         return id;
     }
@@ -55,5 +51,4 @@ public class Company {
     public void setEmployees(List<Employee> employees) {
         this.employees = employees;
     }
-
 }
