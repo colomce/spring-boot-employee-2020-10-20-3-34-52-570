@@ -26,6 +26,7 @@ public class EmployeeService {
     }
 
     public Employee create(Employee newEmployee) {
+        validateEmployee(newEmployee);
         return employeeRepository.save(newEmployee);
     }
 
@@ -35,7 +36,7 @@ public class EmployeeService {
     }
 
     public Employee update(Integer id, Employee employeeUpdate) {
-        validateEmployeeUpdate(employeeUpdate);
+        validateEmployee(employeeUpdate);
         Employee employee = searchById(id);
         employee.setSalary(employeeUpdate.getSalary());
         employee.setAge(employeeUpdate.getAge());
@@ -44,7 +45,7 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
-    private void validateEmployeeUpdate(Employee employee) {
+    private void validateEmployee(Employee employee) {
         if (isNull(employee.getGender())
                 || isNull(employee.getAge())
                 || isNull(employee.getSalary())
