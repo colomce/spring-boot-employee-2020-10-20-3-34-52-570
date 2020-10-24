@@ -41,6 +41,7 @@ public class CompanyService {
     }
 
     public Company update(Integer id, Company updatedCompany) {
+        validateCompany(updatedCompany);
         Company company = searchById(id);
         company.setCompanyName(updatedCompany.getCompanyName());
         return companyRepository.save(company);
