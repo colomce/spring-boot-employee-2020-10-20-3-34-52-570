@@ -33,8 +33,8 @@ public class CompaniesController {
     }
 
     @GetMapping
-    public List<Company> getAll() {
-        return companyService.getAll();
+    public List<CompanyResponse> getAll() {
+        return companyMapper.toResponseList(companyService.getAll());
     }
 
     @PostMapping
