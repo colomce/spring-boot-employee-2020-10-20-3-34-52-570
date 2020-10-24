@@ -1,5 +1,8 @@
 package com.thoughtworks.springbootemployee.controller;
 
+import com.thoughtworks.springbootemployee.dto.EmployeeRequest;
+import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
+import com.thoughtworks.springbootemployee.mapper.EmployeeMapper;
 import com.thoughtworks.springbootemployee.models.Employee;
 import com.thoughtworks.springbootemployee.services.EmployeeService;
 import org.springframework.http.HttpStatus;
@@ -11,9 +14,11 @@ import java.util.List;
 @RequestMapping("/employees")
 public class EmployeesController {
 
+    private final EmployeeMapper employeeMapper;
     private final EmployeeService employeeService;
 
-    public EmployeesController(EmployeeService employeeService) {
+    public EmployeesController(EmployeeMapper employeeMapper, EmployeeService employeeService) {
+        this.employeeMapper = employeeMapper;
         this.employeeService = employeeService;
     }
 
@@ -24,8 +29,10 @@ public class EmployeesController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Employee create(@RequestBody Employee employee) {
-        return employeeService.create(employee);
+    public EmployeeResponse create(@RequestBody EmployeeRequest employeeRequest) {
+        Employee employee = employeeMapper.toEntity(employeeRequest);
+        Employee createdEmployee = employeeService.create(employee);
+        return employeeMapper.toResponse(createdEmployee);
     }
 
     @GetMapping("/{employeeId}")
