@@ -1,6 +1,7 @@
 package com.thoughtworks.springbootemployee.services;
 
 import com.thoughtworks.springbootemployee.exceptions.CompanyNotFoundException;
+import com.thoughtworks.springbootemployee.exceptions.InvalidCompanyException;
 import com.thoughtworks.springbootemployee.models.Company;
 import com.thoughtworks.springbootemployee.models.Employee;
 import com.thoughtworks.springbootemployee.repository.ICompanyRepository;
@@ -8,9 +9,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+
+import static java.util.Objects.isNull;
 
 @Service
 public class CompanyService {
@@ -25,6 +26,7 @@ public class CompanyService {
     }
 
     public Company create(Company newCompany) {
+        validateCompany(newCompany);
         return companyRepository.save(newCompany);
     }
 
@@ -51,5 +53,11 @@ public class CompanyService {
     public List<Company> getCompaniesByPageAndPageSize(int page, int pageSize) {
         Pageable pageable = PageRequest.of(page - 1, pageSize);
         return companyRepository.findAll(pageable).toList();
+    }
+
+    private void validateCompany(Company company) {
+        if (isNull(company.getCompanyName())) {
+            throw new InvalidCompanyException("Company given has null fields!");
+        }
     }
 }
