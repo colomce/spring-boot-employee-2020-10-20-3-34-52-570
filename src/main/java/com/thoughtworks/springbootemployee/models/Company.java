@@ -1,8 +1,5 @@
 package com.thoughtworks.springbootemployee.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,7 +11,6 @@ import javax.persistence.OneToMany;
 import java.util.List;
 
 @Entity
-@JsonPropertyOrder({"companyName", "employeeNumber", "employees"})
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
