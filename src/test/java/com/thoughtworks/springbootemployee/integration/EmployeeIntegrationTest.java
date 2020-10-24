@@ -258,4 +258,18 @@ class EmployeeIntegrationTest {
                 .andReturn();
     }
 
+    @Test
+    void should_return_error_response_with_message_and_status_when_employee_create_given_null_attributes() throws Exception {
+        //given
+        String employeeUpdateJson = "{}";
+
+        // when then
+        mockMvc.perform(post("/employees")
+                .content(employeeUpdateJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Employee given has null fields!"))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"));
+    }
+
 }
