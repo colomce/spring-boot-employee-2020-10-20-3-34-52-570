@@ -29,7 +29,7 @@ public class CompanyResponse {
         return employees;
     }
 
-    public int getEmployeeNumber() {
+    public int getEmployeesNumber() {
         return employees.size();
     }
 

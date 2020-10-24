@@ -20,7 +20,7 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String companyName;
-    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "company_id")
     private List<Employee> employees;
 
@@ -44,7 +44,7 @@ public class Company {
         return employees;
     }
 
-    public int getEmployeeNumber() {
+    public int getEmployeesNumber() {
         return employees.size();
     }
 
