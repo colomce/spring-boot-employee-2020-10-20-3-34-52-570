@@ -192,4 +192,18 @@ public class CompanyIntegrationTest {
                 .andReturn();
     }
 
+    @Test
+    void should_return_the_error_response_with_messasge_and_status_when_update_id_given_invalid_company_id() throws Exception {
+        //given
+        String companyRequestJson = "{}";
+
+        // when then
+        mockMvc.perform(post("/companies")
+                .content(companyRequestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Company given has null fields!"))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+                .andReturn();
+    }
 }
