@@ -93,7 +93,7 @@ class CompanyServiceTest {
         //then
         assertEquals("OOCL", company.getCompanyName());
         assertSame(newCompany, company);
-        assertEquals(3, company.getEmployeesNumber());
+        assertEquals(3, company.getEmployees().size());
     }
 
     @Test

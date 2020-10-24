@@ -6,8 +6,11 @@ import com.thoughtworks.springbootemployee.models.Company;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.util.Collections.*;
 
 @Component
 public class CompanyMapper {
@@ -21,6 +24,9 @@ public class CompanyMapper {
     public CompanyResponse toResponse(Company company) {
         CompanyResponse companyResponse = new CompanyResponse();
         BeanUtils.copyProperties(company, companyResponse);
+        boolean hasEmployee = company.getEmployees() != null;
+        companyResponse.setEmployeesNumber(hasEmployee ? company.getEmployees().size() : 0);
+        companyResponse.setEmployees(hasEmployee ? company.getEmployees() : EMPTY_LIST);
         return companyResponse;
     }
 
