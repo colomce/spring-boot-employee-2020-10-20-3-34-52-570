@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
+import static java.util.Optional.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -105,7 +106,7 @@ class CompanyServiceTest {
 
         Company company = new Company("OOCL", employeeList);
         ICompanyRepository repository = mock(ICompanyRepository.class);
-        when(repository.findById(company.getId())).thenReturn(Optional.of(company));
+        when(repository.findById(company.getId())).thenReturn(of(company));
         CompanyService companyService = new CompanyService(repository);
 
         //when
@@ -125,7 +126,7 @@ class CompanyServiceTest {
         Company newCompany = new Company("OOCL", Arrays.asList(firstEmployee, secondEmployee));
         newCompany.setId(1);
         ICompanyRepository companyRepository = mock(ICompanyRepository.class);
-        when(companyRepository.findById(1)).thenReturn(Optional.of(newCompany));
+        when(companyRepository.findById(1)).thenReturn(of(newCompany));
         CompanyService companyService = new CompanyService(companyRepository);
         //when
         List<Employee> employees = companyService.getEmployeesByCompanyId(1);
@@ -144,7 +145,7 @@ class CompanyServiceTest {
         Company expectedCompany = new Company("OOIL", null);
         expectedCompany.setId(1);
         ICompanyRepository companyRepository = mock(ICompanyRepository.class);
-        when(companyRepository.findById(1)).thenReturn(Optional.of(company));
+        when(companyRepository.findById(1)).thenReturn(of(company));
         when(companyRepository.save(company)).thenReturn(expectedCompany);
         CompanyService companyService = new CompanyService(companyRepository);
 
@@ -161,6 +162,7 @@ class CompanyServiceTest {
         Company company = new Company("OOCL", null);
         company.setId(1);
         ICompanyRepository companyRepository = mock(ICompanyRepository.class);
+        when(companyRepository.findById(company.getId())).thenReturn(of(company));
 
         CompanyService companyService = new CompanyService(companyRepository);
 
@@ -168,7 +170,7 @@ class CompanyServiceTest {
         companyService.delete(company.getId());
 
         //then
-        verify(companyRepository, times(1)).deleteById(1);
+        verify(companyRepository, times(1)).delete(company);
     }
 
     @Test
