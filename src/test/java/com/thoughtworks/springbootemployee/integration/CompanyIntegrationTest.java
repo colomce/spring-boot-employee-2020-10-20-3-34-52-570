@@ -193,12 +193,30 @@ public class CompanyIntegrationTest {
     }
 
     @Test
-    void should_return_the_error_response_with_messasge_and_status_when_update_id_given_invalid_company_id() throws Exception {
+    void should_return_invalid_company_exception_when_creating_a_invalid_company() throws Exception {
         //given
         String companyRequestJson = "{}";
 
         // when then
         mockMvc.perform(post("/companies")
+                .content(companyRequestJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Company given has null fields!"))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+                .andReturn();
+    }
+
+    @Test
+    void should_return_the_error_response_with_messasge_and_status_when_update_id_given_invalid_company_id() throws Exception {
+        //given
+        Company company = new Company("OOCL", Collections.emptyList());
+        Company createdCompany = companyRepository.save(company);
+
+        String companyRequestJson = "{}";
+
+        // when then
+        mockMvc.perform(put("/companies/{companyId}", createdCompany.getId())
                 .content(companyRequestJson)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
