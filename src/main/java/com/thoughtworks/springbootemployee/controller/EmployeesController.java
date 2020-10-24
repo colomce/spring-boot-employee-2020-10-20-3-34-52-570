@@ -23,8 +23,8 @@ public class EmployeesController {
     }
 
     @GetMapping
-    public List<Employee> getAll() {
-        return employeeService.getAll();
+    public List<EmployeeResponse> getAll() {
+        return employeeMapper.toResponseList(employeeService.getAll());
     }
 
     @PostMapping
